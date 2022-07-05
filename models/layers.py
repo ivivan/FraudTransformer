@@ -1,13 +1,3 @@
-# -*- coding: utf-8 -*-
-# Author: zhao chen
-# Date: 2021/7/2
-
-'''
-reference：
-    https://github.com/lucidrains/tab-transformer-pytorch
-    https://github.com/rixwew/pytorch-fm
-'''
-
 import torch
 import torch.nn.functional as F
 import numpy as np

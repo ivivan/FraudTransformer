@@ -1,8 +1,3 @@
-# -*- coding: utf-8 -*-
-# Author: zhao chen
-# Date: 2021/7/2
-
-
 from models.layers import *
 import torch
 
