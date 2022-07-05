@@ -1,8 +1,3 @@
-# -*- coding: utf-8 -*-
-# Author: zhao chen
-# Date: 2021/7/2
-
-
 import numpy as np
 import torch
 import tqdm
@@ -57,16 +52,29 @@ import tqdm
 
 #### This is for data with categorical feature only
 
+# def predict_prob(model, data_loader, device):
+#     model.eval()
+#     y_pred = []
+#     with torch.no_grad():
+#         for X_batch, y_batch in tqdm.tqdm(data_loader, smoothing=0, mininterval=1.0):
+#             X_batch, y_batch = X_batch.to(device), y_batch.to(device)
+#             y_out = model(X_batch)
+#             y_pred.extend(y_out.tolist())
+#     return y_pred
+
 def predict_prob(model, data_loader, device):
     model.eval()
     y_pred = []
+    y_pred_tensor = []
     with torch.no_grad():
-        for X_batch, y_batch in tqdm.tqdm(data_loader, smoothing=0, mininterval=1.0):
+        for X_batch, y_batch in data_loader:
             X_batch, y_batch = X_batch.to(device), y_batch.to(device)
-            y_out = model(X_batch)
+            intermediate = model(X_batch)
+            y_out = torch.sigmoid(intermediate)
+            # y_out = model(X_batch)
+            y_pred_tensor.extend(y_out)
             y_pred.extend(y_out.tolist())
-    return y_pred
-
+    return y_pred, y_pred_tensor
 
 def predict_prob_noy(model, data_loader, device):
     model.eval()
