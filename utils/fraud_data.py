@@ -20,7 +20,7 @@ class FraudData(object):
                 "NF/F rate in train:", round(float(len(train[train["frd"] == 0])) / len(train[train["frd"] == 1]), 2))
             print("NF/F rate in val:", round(float(len(val[val["frd"] == 0])) / len(val[val["frd"] == 1]), 2))
             print("NF/F rate in test:", round(float(len(test[test["frd"] == 0])) / len(test[test["frd"] == 1]), 2))
-            # print(train.head())
+
             self.train, self.val, self.test = train, val, test
         else:
             print("No input data to build model, need input while training!")
@@ -55,14 +55,14 @@ class FraudData(object):
         data = data.sample(frac=1)  ## shuffle dataframe
         data['frd'] = pd.to_numeric(data['frd'])
 
-        ########## add weighted column ##########
-        #########################################
-        print('add weighted column')
-        no_non_fraud = data.loc[data['frd'] == 0].shape[0]
-        no_fraud = data.loc[data['frd'] == 1].shape[0]
-        print(round(no_non_fraud / no_fraud))
-        data.loc[data['frd'] == 1, 'weights_column'] = round(no_non_fraud / no_fraud)
-        data.loc[data['frd'] == 0, 'weights_column'] = 1
+        # ########## add weighted column ##########
+        # #########################################
+        # print('add weighted column')
+        # no_non_fraud = data.loc[data['frd'] == 0].shape[0]
+        # no_fraud = data.loc[data['frd'] == 1].shape[0]
+        # print(round(no_non_fraud / no_fraud))
+        # data.loc[data['frd'] == 1, 'weights_column'] = round(no_non_fraud / no_fraud)
+        # data.loc[data['frd'] == 0, 'weights_column'] = 1
 
         if by_time:
             print('split by time')

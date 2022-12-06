@@ -107,7 +107,6 @@ class TabTransformer(nn.Module):
             self,
             *,
             categories,
-            num_continuous,
             dim,
             depth,
             heads,
@@ -116,7 +115,6 @@ class TabTransformer(nn.Module):
             mlp_hidden_mults = (4, 2),
             mlp_act = None,
             num_special_tokens = 2,
-            continuous_mean_std = None,
             attn_dropout = 0.,
             ff_dropout = 0.,
             ):
@@ -129,12 +127,8 @@ class TabTransformer(nn.Module):
         categories_offset = F.pad(torch.tensor(list(categories)), (1, 0), value = num_special_tokens) # categories_offset ~ [num_categ + 1]
         categories_offset = categories_offset.cumsum(dim=-1)[:-1] # categories_offset ~ [num_categ]
         self.register_buffer('categories_offset', categories_offset)
-        if continuous_mean_std is not None:
-            self.register_buffer('continuous_mean_std', continuous_mean_std)
-        else:
-            self.register_buffer('continuous_mean_std', None)
-        self.norm = nn.LayerNorm(num_continuous)
-        self.num_continuous = num_continuous
+
+
         self.transformer = Transformer(
                 num_tokens = total_tokens,
                 dim = dim,
@@ -144,20 +138,17 @@ class TabTransformer(nn.Module):
                 attn_dropout = attn_dropout,
                 ff_dropout = ff_dropout,
                 )
-        input_size = (dim * self.num_categories) + num_continuous
+        input_size = (dim * self.num_categories)
         l = input_size // 8
         hidden_dimensions = list(map(lambda x: l * x, mlp_hidden_mults))
         all_dimensions = [input_size, *hidden_dimensions, dim_out]
         self.mlp = MLP(all_dimensions, act = mlp_act)
     
-    def forward(self, x_categ, x_cont): # x_categ ~ [batch_size, num_categ], x_cont ~ [batch_size, num_cont]
+    def forward(self, x_categ): # x_categ ~ [batch_size, num_categ], x_cont ~ [batch_size, num_cont]
         assert x_categ.shape[-1] == self.num_categories
         x_categ += self.categories_offset # x_categ ~ [batch_size, num_categ]
         x = self.transformer(x_categ) # x ~ [batch_size, num_categ, dim]
         flat_categ = x.flatten(1) # flat_categ ~ [batch_size, num_categ * dim]
-        if self.continuous_mean_std is not None:
-            mean, std = self.continuous_mean_std.unbind(dim=-1)
-            x_cont = (x_cont - mean) / std # x_cont ~ [batch_size, num_cont]
-        normed_cont = self.norm(x_cont) # normed_cont ~ [batch_size, num_cont]
-        x = torch.cat((flat_categ, normed_cont), dim=-1) # x ~ [batch_size, (num_categ * dim) + num_cont]
-        return self.mlp(x) # return ~ [batch_size, dim_out]
+        x = torch.cat([flat_categ], dim=-1) # x ~ [batch_size, (num_categ * dim) + num_cont]
+        out = self.mlp(x)
+        return  out.squeeze(1)# return ~ [batch_size, dim_out]
