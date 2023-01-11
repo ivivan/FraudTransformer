@@ -96,7 +96,7 @@ def prepare_model():
     tokenizer.add_special_tokens(special_tokens_dict)
 
     # Load Model
-    finetunemodel = BertForSequenceClassification.from_pretrained('./checkpoints/finetune/checkpoint-14040',
+    finetunemodel = BertForSequenceClassification.from_pretrained('./checkpoints/finetune/checkpoint-46800',
                                                                   num_labels=2)
     classifier = transformers.pipeline("sentiment-analysis", model=finetunemodel, tokenizer=tokenizer,
                                        return_all_scores=True)
@@ -147,7 +147,7 @@ if __name__ == '__main__':
             st.write(
                 """
         **About This Demo**
-        - The *FraudTransformer* applys transformer architecture to fraud data (categorical type),
+        - The *FraudTransformer* applies transformer architecture to fraud data (categorical type),
         - Implemented and evaluated in the summer internship project 2022 
         - This demo model is tested on both the Colab cloud and mltitan server
         
