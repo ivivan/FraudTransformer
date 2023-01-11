@@ -26,6 +26,8 @@ import shap
 from sklearn import metrics
 from sklearn.metrics import roc_auc_score, classification_report, confusion_matrix, ConfusionMatrixDisplay, roc_curve
 from transformers_interpret import SequenceClassificationExplainer
+from bertviz import head_view, model_view
+from bertviz.neuron_view import show
 
 import transformers
 from transformers import BertForSequenceClassification
@@ -103,10 +105,10 @@ def prepare_mlm_model():
     tokenizer.add_special_tokens(special_tokens_dict)
 
     # Load Model
-    newmodel = BertForMaskedLM.from_pretrained('checkpoints/checkpoint-65520')
+    newmodel = BertForMaskedLM.from_pretrained('checkpoints/checkpoint-65520',output_attentions=True)
     mask_filler = transformers.pipeline("fill-mask", model=newmodel, tokenizer=tokenizer, top_k=2)
 
-    return mask_filler
+    return mask_filler, newmodel, tokenizer
 
 
 def st_plot_text_shap(shap_val, height=600):
@@ -233,6 +235,34 @@ if __name__ == '__main__':
 
         st.subheader("**Model Performance**")
 
-        mask_filler = prepare_mlm_model()
+        mask_filler,_,_ = prepare_mlm_model()
 
         st.write('Filled Mask:', mask_filler(txt))
+
+
+
+    st.markdown("---")
+
+    with st.container():
+
+        st.subheader("**Visualizing Model Attention**")
+
+        _, newmodel, tokenizer = prepare_mlm_model()
+
+        inputs = tokenizer.encode_plus(s, return_tensors='pt')
+        input_ids = inputs['input_ids']
+        token_type_ids = inputs['token_type_ids']
+        attention = newmodel(input_ids, token_type_ids=token_type_ids)[-1]
+        input_id_list = input_ids[0].tolist()  # Batch index 0
+        tokens = tokenizer.convert_ids_to_tokens(input_id_list)
+
+        html_head_view = head_view(attention, tokens, html_action='return')
+
+        with open("head_view.html", 'w') as file:
+            file.write(html_head_view.data)
+
+        with open('head_view.html', 'r') as f:
+            html_data = f.read()
+
+        ## Show in webpage
+        st.components.v1.html(html_data, height=1200, scrolling=True)
