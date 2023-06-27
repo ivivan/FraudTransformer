@@ -36,7 +36,7 @@ from IPython.utils import capture
 
 device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
 
-@st.cache
+@st.cache_data
 def load_sample_data():
     config = input_config("US_banking_login_test")  #### like "US_ecommerce_login_test"
 
@@ -81,7 +81,7 @@ def load_sample_data():
 
     return input_data, modified_rcs
 
-@st.cache(allow_output_mutation=True)
+@st.cache_resource
 def prepare_model():
     # Set Tokenizer
     vocab_file = "./checkpoints/vocab.txt"

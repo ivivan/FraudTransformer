@@ -44,7 +44,7 @@ def pure_comma_separation(list_str, return_list=True):
     return ", ".join(r)
 
 
-@st.cache
+@st.cache_data
 def load_sample_data():
     config = input_config("US_banking_login_test")  #### like "US_ecommerce_login_test"
 
@@ -90,7 +90,7 @@ def load_sample_data():
     return input_data, modified_rcs
 
 
-@st.cache(allow_output_mutation=True)
+@st.cache_resource
 def prepare_mlm_model():
     # Set Tokenizer
     vocab_file = "checkpoints/vocab.txt"
