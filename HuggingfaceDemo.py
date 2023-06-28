@@ -98,8 +98,7 @@ def prepare_model():
     # Load Model
     finetunemodel = BertForSequenceClassification.from_pretrained('./checkpoints/finetune/checkpoint-46800',
                                                                   num_labels=2)
-    classifier = transformers.pipeline("sentiment-analysis", model=finetunemodel, tokenizer=tokenizer,
-                                       return_all_scores=True)
+    classifier = transformers.pipeline("sentiment-analysis", model=finetunemodel, tokenizer=tokenizer,top_k=None)
     explainer = shap.Explainer(classifier)
     cls_explainer = SequenceClassificationExplainer(finetunemodel, tokenizer)
 
