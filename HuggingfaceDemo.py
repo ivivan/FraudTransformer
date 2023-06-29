@@ -146,9 +146,9 @@ if __name__ == '__main__':
             st.write(
                 """
         **About This Demo**
-        - The *FraudTransformer* applies transformer architecture to fraud data (categorical type),
-        - Implemented and evaluated in the summer internship project 2022 
-        - This demo model is tested on both the Colab cloud and mltitan server
+        - The *FraudTransformer* utilizes transformer architecture for categorical fraud data,
+        - Evaluated on 2022 test data. Larger model under development. 
+        - This model is tested on both the Colab cloud and mltitan server
         
         - Some reference papers that help build this idea:
             - TabTransformer: Tabular Data Modeling Using Contextual Embeddings
@@ -158,11 +158,11 @@ if __name__ == '__main__':
 
         ***
 
-        **FraudTransformer Architecture (Right Figure)** 
+        **FraudTransformer Architecture (See Right Figure)** 
 
-        - BERT (Bidirectional Encoder Representations from Transformers),
+        - BERT (Bidirectional Encoder Representations from Transformers) inspired,
         - Fraud specific tokenizer,
-        - Pretrain + Finetune
+        - Pre-training and fine-tuning phases
                 """
             )
 
