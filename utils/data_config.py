@@ -83,6 +83,17 @@ def input_config(flagship_model):
             "exclude_dates": [(20201201, 20201202)] * 9,
             "output_folder": "/data/zhanyi02/US_banking_payment/"},
 
+        "TrustScore_2022": {
+            "org_list": ['nd1lmtff','551fvs6v','5pbbq33n','c7f45hl1','m5o81ypt','vn0xwfzw','9ghwyvdk','hkekmym4','bzzzajtm','23o27znc','n3dmfcgy','4rvrfbxt','0oammhpj','nhs11h5x','551fvs6v','hgy2n0ks','0w57c49k','ummqowa2','2gfnuum5','dbrnb56e','yfy4aqbg','wfw5lfw8','4rvrfbxt','9ghwyvdk','coombeus'],
+            "nonfrd_ratio": [0.05964, 0.1364, 0.03512, 0.08405, 0.01233, 0.08186, 0.04309, 0.9004, 0.05164, 0.00104, 0.0002, 0.00037, 0.00863, 0.00247, 0.00119, 0.00214, 0.02707, 0.01468, 0.02559, 0.00841, 0.03217, 0.01005, 0.00065, 0.00856, 0.02292, 0.05964, 0.1364, 0.03512, 0.08405, 0.01233, 0.08186, 0.04309, 0.9004, 0.05164, 0.00104, 0.0002, 0.00037, 0.00863, 0.00247, 0.00119, 0.00214, 0.02707, 0.01468, 0.02559, 0.00841, 0.03217, 0.01005, 0.00065, 0.00856, 0.02292],
+            "frd_ratio": [0.14,1,0.4,0.57,0.15,1,0.34,1,1,0.41,0.57,1,1,1,0.71,0.11,0.16,0.89,0.28,1,0.96,1,1,1,1,1],
+            "date_range": [(20220601, 20221231)] * 25,
+            "month_range": [(202206, 202212)] * 25,
+            "event_types": ["payment"] * 25,
+            "primary_industry": ["banking"] * 25,
+            "exclude_dates": [(20201201, 20201202)] * 25,
+            "output_folder": "/data/zhanyi02/trustscore/trustscore2023/combined/trust_score_2023_merge.csv"},
+
     }
 
     if flagship_model in config:
