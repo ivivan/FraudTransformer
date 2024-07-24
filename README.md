@@ -1,5 +1,6 @@
 # FraudTransformer
-Test the idea of NLP on Fraud Prevention
+
+Enable the power of Transformer in Fraud Detection
 
 [Streamlit APP](https://fraudtransformer.streamlit.app/)
 
